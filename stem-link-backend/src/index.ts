@@ -1,17 +1,20 @@
 import "dotenv/config";
-import { connectDB } from "./infrastructure/db";
 import express from 'express';
-import solarUnitRouter from './api/solar-unit';
 import energyGenerationRecordRouter from './api/energy-generation-record'
-import { loggerMiddleware } from "./api/middlewares/logger-middleware";
 import { globalErrorHandler } from "./api/middlewares/global-error-handling-middleware";
+import { loggerMiddleware } from "./api/middlewares/logger-middleware";
+import solarUnitRouter from './api/solar-unit';
+import { connectDB } from "./infrastructure/db";
 import cors from "cors"
+import webhooksRouter from "./api/webhooks";
 
 const server = express();
 server.use(express.json()); // Middleware to parse JSON bodies - convert json to js object and store in
 server.use(cors({origin:"http://localhost:5173"}));  // Enable CORS
 
 server.use(loggerMiddleware);  // Middleware to log requests
+
+server.use("/api/webhooks", webhooksRouter);  // Routes for webhooks - middleware
 
 server.use("/api/solar-units", solarUnitRouter);  // Routes for solar units - middleware
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);  // Routes for energy generation records - middleware

@@ -1,7 +1,9 @@
 import { Link } from "react-router";
+import { SignedIn , SignedOut, UserButton } from "@clerk/clerk-react";
+import { Button } from "../ui/button";
 
 const Navigation = () => {
-  const user = "JD";
+
   /**
    * Only JS expressions are allowed in return statement => js code that evaluates to a value
    * Function calls
@@ -12,6 +14,7 @@ const Navigation = () => {
 
   return (
     <nav className={"px-12 py-6 flex justify-between items-center"}>
+      {/* Logo Section */}
       <Link to="/" className={"flex items-center gap-3"}>
         <div
           className={
@@ -40,6 +43,7 @@ const Navigation = () => {
 
       {/* Dashboard Link */}
       <div className={"flex items-center gap-12 "}>
+        <SignedIn>
         <Link to="/dashboard" className={"flex items-center gap-3 px-5 py-3 border-b-2 border-transparent hover:border-b-2 hover:bg-gray-100 hover:rounded-full"}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -61,20 +65,26 @@ const Navigation = () => {
           </svg>
           <span className="font-[Inter] text-sm font-medium">Dashboard</span>
         </Link>
+        </SignedIn>
 
-        {/* User Avatar */}
-        <div className={"flex items-center  px-4 py-1.5 gap-2 border-transparent hover:border-b-1 hover:bg-gray-100 hover:rounded-full "}>
-          <div
-            className={
-              "w-8 h-8 rounded-full bg-blue-400 flex justify-center items-center"
-            }
-          >
-            <span className="font-[Inter] text-sm font-medium text-white">
-              {user}
-            </span>
-          </div>
-          <span className="font-[Inter] text-sm font-medium">Aelora</span>
+
+        <div className={"flex gap-2 items-center"}>
+          <SignedOut>
+            <Button as asChild variant={"outline"}>
+              <Link to="/sign-in" className={"flex items-center gap-3 px-3 py-2"}>Sign In</Link>
+            </Button>
+
+            <Button as asChild>
+              <Link to="/sign-up" className={"flex items-center gap-3 px-3 py-2"}>Sign Up</Link>
+            </Button>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+
         </div>
+
       </div>
     </nav>
   );

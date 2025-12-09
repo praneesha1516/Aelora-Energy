@@ -2,22 +2,11 @@ import Tab from "./Tab";
 import EnergyProductionCards from "./EnergyProductionCards";
 import { useSelector } from "react-redux";
 import {Button} from "@/components/ui/button"
-import { getSolarUnitById } from "@/lib/api/solar-unit";
-import { useState , useEffect } from "react";
 import { subDays, toDate, format } from "date-fns";
 import { useGetEnergyGenerationRecordsBySolarUnitQuery } from "@/lib/redux/query";
 
 const SolarEnergyproduction = () => {
-    const energyProductionData = [
-        { day: "Mon", date: "Aug 18", Production: 34.1, hasAnomaly:false },
-        { day: "Tue", date: "Aug 19", Production: 30.5, hasAnomaly:true },
-        { day: "Wed", date: "Aug 20", Production: 3.2, hasAnomaly:false },
-        { day: "Thu", date: "Aug 21", Production: 12.7, hasAnomaly:false },
-        { day: "Fri", date: "Aug 22", Production: 23.7, hasAnomaly:true },
-        { day: "Sat", date: "Aug 23", Production: 54.7, hasAnomaly:false },
-        { day: "Sun", date: "Aug 24", Production: 43.7, hasAnomaly:false }
-    ];
-
+  
     const tabs = [
         {label: "All", value: "all"},
         {label: "Anomaly", value: "anomaly"}
@@ -30,8 +19,9 @@ const SolarEnergyproduction = () => {
       // Fetch data using the RTK Query hook
     const { data, isLoading, isError, error } =
     useGetEnergyGenerationRecordsBySolarUnitQuery({
-      id: "68ebc456189fc937242ec221",
+      id: "693180eba9989b57a66f1910",
       groupBy: "date",
+      limit: 7,
     });
     console.log("Fetching data...");
 

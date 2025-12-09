@@ -7,8 +7,8 @@ return (
     <>
       <SidebarProvider>
         <AppSidebar />
-        <main className="p-4">
-            <SidebarTrigger className="w-8 h-8 block" />
+        <main className="p-4 w-full">
+        <SidebarTrigger className="w-8 h-8 block" />
         <Outlet />
         </main>
       </SidebarProvider>
