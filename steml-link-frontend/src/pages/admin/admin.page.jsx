@@ -1,7 +1,7 @@
+import { Navigate } from "react-router"
 
 export default function AdminPage()  {
     return (
-
-        <h1>Admin Page</h1>
+        <Navigate to = "/admin/solar-units" />
     )
 }
