@@ -19,9 +19,10 @@ export class UnauthorizedError extends Error {
     }
 }
 
-export class forbiddenError extends Error {
+//forbidden error means - the user is authenticated but does not have permission to access the resource
+export class ForbiddenError extends Error {
     constructor(message: string) {
         super(message);
-        this.name = "forbiddenError";
+        this.name = "ForbiddenError";
     }
 }

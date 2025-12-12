@@ -8,6 +8,7 @@ import {
     deleteSolarUnit, 
     createSolarUnitValidator} from "../application/solar-unit";
 import { authenticationMiddleware } from "./middlewares/authentication-middleware";
+import { authorizationMiddleware } from "./middlewares/authorization-middleware";
 
 const solarUnitRouter = express.Router();
 

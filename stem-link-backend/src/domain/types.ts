@@ -1,5 +1,5 @@
 export type Role = "admin" | "staff" ;
 
-export type UserPublicMetaData = {
+export type UserPublicMetadata = {
     role?:Role;
 }
