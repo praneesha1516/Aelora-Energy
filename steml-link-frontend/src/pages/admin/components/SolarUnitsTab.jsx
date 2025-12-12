@@ -5,9 +5,11 @@ import { useGetSolarUnitsQuery } from "@/lib/redux/query";
 import { se } from "date-fns/locale";
 import { Zap } from "lucide-react";
 import { use, useState } from "react";
+import { useNavigate } from "react-router";
 
 export function SolarUnitsTab() {
   const [searchTerm , setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
 const { data: solarUnits , isLoading: isLoadingSolarUnit, isError:isErrorSolarUnits , error: errorSolarUnit} = 
 useGetSolarUnitsQuery();
@@ -28,8 +30,6 @@ const filteredUnits = searchTerm !== "" ? solarUnits.filter((unit) =>
   ) : solarUnits;
 
      
-
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -46,7 +46,7 @@ const filteredUnits = searchTerm !== "" ? solarUnits.filter((unit) =>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {filteredUnits.map((unit) => (
-          <Card key={unit.id} className="p-6 hover:shadow-lg transition-shadow">
+          <Card key={unit._id} className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start justify-between">
               <div className="space-y-2 flex-1">
                 <div className="flex items-center gap-2">
@@ -72,10 +72,10 @@ const filteredUnits = searchTerm !== "" ? solarUnits.filter((unit) =>
                 </p>
               </div>
               <div className="flex gap-2 pt-2">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => navigate(`/admin/solar-units/${unit._id}`)}>
                   Edit
                 </Button>
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => navigate(`/admin/solar-units/${unit._id}`)}>
                   View
                 </Button>
               </div>
