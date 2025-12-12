@@ -3,6 +3,8 @@ import {CreateSolarUnitDto } from "../domain/dtos/solar-unit";
 import {SolarUnit} from '../infrastructure/entities/SolarUnit';
 import {Request , Response, NextFunction} from "express";
 import { NotFoundError , ValidationError } from "../domain/errors/errors";
+import { User } from "../infrastructure/entities/User";
+import {getAuth} from "@clerk/express";
 
 
 
@@ -25,7 +27,20 @@ export const createSolarUnitValidator = (req:Request , res:Response , next:NextF
     next(); // Proceed to the next middleware
 };
 
+export const getSolarUnitById = async(req: Request, res: Response) => {
+    try {
+        const { id } = req.params; 
+        const solarUnit = await SolarUnit.findById(id);
 
+        if (!solarUnit) {
+                return res.status(404).json({ message: "Solar unit not found" });
+            }
+        res.status(200).json(solarUnit);
+
+    }catch(error) {
+        res.status(500).json({message: "internal server error"});
+    }
+    };
 
 
 
@@ -50,22 +65,30 @@ export const createSolarUnit = async(req: Request, res: Response , next: NextFun
     }
 }
 
-export const getSolarUnitById = async(req: Request, res: Response) => {
+export const getSolarUnitForUser = async (req: Request, res: Response , next: NextFunction) => {
     try {
-        const { id } = req.params; 
-        const solarUnit = await SolarUnit.findById(id);
+         const auth =  getAuth(req);
+         const clerkUserId = auth.userId;
 
-        if (!solarUnit) {
-                return res.status(404).json({ message: "Solar unit not found" });
-            }
-        res.status(200).json(solarUnit);
+         console.log("Clerk User ID:", clerkUserId);
 
-    }catch(error) {
-        res.status(500).json({message: "internal server error"});
+         // Find the user by clerkUserId
+         const user = await User.findOne({clerkUserId });
+         if (!user) {
+            throw new NotFoundError("User not found");
+         }
+
+         // Find the solar unit by userId
+         const solarUnits = await SolarUnit.findOne({userId : user._id});
+         res.status(200).json(solarUnits);
+
+    } catch (error) {
+        next(error);
     }
-    };
+};
 
-    export const updateSolarUnit = async (
+
+export const updateSolarUnit = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -105,3 +128,12 @@ export const deleteSolarUnit = async (req: Request, res: Response) => {
     }
     
 };
+
+function next(error: unknown) {
+    throw new Error("Function not implemented.");
+}
+
+
+
+
+

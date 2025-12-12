@@ -7,14 +7,18 @@ import solarUnitRouter from './api/solar-unit';
 import { connectDB } from "./infrastructure/db";
 import cors from "cors"
 import webhooksRouter from "./api/webhooks";
+import { clerkMiddleware } from "@clerk/express";
 
 const server = express();
-server.use(express.json()); // Middleware to parse JSON bodies - convert json to js object and store in
 server.use(cors({origin:"http://localhost:5173"}));  // Enable CORS
 
 server.use(loggerMiddleware);  // Middleware to log requests
 
 server.use("/api/webhooks", webhooksRouter);  // Routes for webhooks - middleware
+
+server.use(clerkMiddleware());  // Clerk authentication middleware
+
+server.use(express.json()); // Middleware to parse JSON bodies - convert json to js object and store in
 
 server.use("/api/solar-units", solarUnitRouter);  // Routes for solar units - middleware
 server.use("/api/energy-generation-records", energyGenerationRecordRouter);  // Routes for energy generation records - middleware

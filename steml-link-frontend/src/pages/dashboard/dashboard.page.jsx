@@ -1,16 +1,25 @@
 //THIS is RTK query hook to fetch energy generation records for a solar unit
-import { useGetEnergyGenerationRecordsBySolarUnitQuery } from "@/lib/redux/query";
+import { useGetSolarUnitForUserQuery } from "@/lib/redux/query";
 import DataCard  from "./components/DataCard";
 import  DataChart  from "./components/DataChart";
 import { useUser } from "@clerk/clerk-react";
 
 const DashboardPage = () => {
-
-   const { user } = useUser();
-   const solarUnitId = "693180eba9989b57a66f1910" ;
+   const { user , isLoaded } = useUser();
    
+   // Fetch the solar unit associated with the logged-in Clerk user , data:solarUnit renaming data feteched from the query
+   const {data: solarUnit , isLoading: isLoadingSolarUnit , isError: isErrorSolarUnit, error: errorSolarUnit} = useGetSolarUnitForUserQuery();
 
-console.log("User info:", user);
+
+    if(isLoadingSolarUnit) {
+      return <div>Loading...</div>;
+    }
+
+    if(isErrorSolarUnit) {
+      return <div>Error: {errorSolarUnit.message}</div>;
+    }
+    console.log("Solar Unit:", solarUnit);
+
   return (
     <>
     <div className=" text-gray-800 m-4">
@@ -19,13 +28,13 @@ console.log("User info:", user);
 
       <div className="mt-8 w-full">
         <DataCard       //DataCard component is used to display the energy generation records in a card format
-         solarUnitId = {solarUnitId}
+         solarUnitId = {solarUnit._id}
          title="Energy Generation Records"
         />
 
        <div className="mt-8 ">
         <DataChart
-        solarUnitId = {solarUnitId}/>
+        solarUnitId = {solarUnit._id}/>
        </div>
       </div>
     </div>
